@@ -72,7 +72,7 @@
                         <td class="p-1 whitespace-nowrap text-center text-xs leading-6 font-medium text-gray-900">
                         <div class="flex items-center justify-center space-x-2">
                                 <!-- Tombol Detail -->
-                                <a href="{{ route('sanksi.show', $student) }}" class="p-2  rounded-full  group transition-all duration-500  flex item-center">
+                                <a href="{{ route('user.pelanggaran_siswa', ['siswa_id' => $student->id]) }}" class="p-2  rounded-full  group transition-all duration-500  flex item-center">
                                         <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20"  
                                             fill="green" viewBox="0 0 24 24" >
                                             <path class="fill-green-600" d="M7 10h10v2H7zM7 14h7v2H7z"></path><path d="M19 3h-2c0-.55-.45-1-1-1H8c-.55 0-1 .45-1 1H5c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 17H5V5h2v2h10V5h2z"></path>

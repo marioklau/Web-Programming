@@ -17,6 +17,11 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $tahunAktif = Tahun::where('status', 'aktif')->first();
+
+        if (!$tahunAktif) {
+            return redirect()->route('dashboard')->with('error', 'Tahun ajaran aktif belum diatur.');
+        }
+
         $selectedKelas = $request->get('kelas_id');
         $selectedPeriode = $request->get('periode', 'all');
         $startDate = $request->get('start_date');
@@ -83,6 +88,11 @@ class LaporanController extends Controller
     public function exportPdf(Request $request)
     {
         $tahunAktif = Tahun::where('status', 'aktif')->first();
+
+        if (!$tahunAktif) {
+            return redirect()->route('dashboard')->with('error', 'Tahun ajaran aktif belum diatur.');
+        }
+
         $kelasId = $request->get('kelas_id');
         $selectedPeriode = $request->get('periode', 'all'); // Pastikan nama parameter sesuai
         $startDate = $request->get('start_date');

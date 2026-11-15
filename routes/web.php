@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
     // Siswa Routes
     Route::resource('siswa', SiswaController::class);
-    Route::get('/siswa-import', [SiswaController::class, 'import'])->name('siswa.import.view');
+    Route::get('/siswa-import', [SiswaController::class, 'create'])->name('siswa.import.view');
     Route::post('/siswa-import', [SiswaController::class, 'import'])->name('siswa.import');
 
     // Pelanggaran Routes
@@ -80,7 +80,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'kelas']);
 
     // Tahun Ajaran Routes
-    Route::resource('tahun-ajaran', TahunAjaranController::class);
+    Route::resource('tahun-ajaran', TahunAjaranController::class)->only(['index', 'create', 'store']);
     Route::patch('/tahun-ajaran/{id}/aktifkan', [TahunAjaranController::class, 'aktifkan'])
          ->name('tahun-ajaran.aktifkan');
 

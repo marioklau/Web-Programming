@@ -3,15 +3,9 @@
 @section('title', 'Detail Bentuk Pelanggaran')
 
 @section('content')
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <div class="container mx-auto mt-10 mb-10 px-10">
-        <div class="grid grid-cols-8 gap-4 mb-4 p-5">
-            <div class="col-span-4 mt-2">
-                <h1 class="text-3xl font-bold">
-                    Detail Bentuk Pelanggaran: {{ $type->nama_kategori }}
-                </h1>
-            </div>
+    <div class="container mx-auto">
+        <div class="mb-4">
+            <h1>Detail Bentuk Pelanggaran: {{ $jenis->bentuk_pelanggaran }}</h1>
         </div>
 
         <div class="bg-white p-5 rounded shadow-sm">
@@ -23,33 +17,39 @@
                                 Bentuk Pelanggaran
                             </th>
                             <td class="px-6 py-4">
-                                {{ $type->nama_kategori }}
+                                {{ $jenis->bentuk_pelanggaran }}
                             </td>
                         </tr>
-                        @if(isset($categories->jumlah))
                         <tr class="bg-white border-b border-gray-200">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Jumlah
+                                Kategori
                             </th>
                             <td class="px-6 py-4">
-                                {{ $categories->jumlah }}
+                                {{ $jenis->kategori->nama_kategori ?? '-' }}
                             </td>
                         </tr>
-                        @endif
+                        <tr class="bg-white border-b border-gray-200">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                Bobot Poin
+                            </th>
+                            <td class="px-6 py-4">
+                                {{ $jenis->bobot_poin }}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="mt-5 flex space-x-3">
-            <a href="{{ route('kategori.index') }}"
+            <a href="{{ route('jenis.index') }}"
                class="px-6 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs uppercase rounded-full hover:bg-gray-300 transition">
-                Back
+                Kembali
             </a>
 
-            <a href="{{ route('kategori.edit', $categories) }}"
+            <a href="{{ route('jenis.edit', $jenis) }}"
                class="px-6 py-2.5 bg-blue-400 text-white font-medium text-xs uppercase rounded-full hover:bg-blue-500 transition">
-                Edit Kategori
+                Edit Bentuk Pelanggaran
             </a>
         </div>
     </div>

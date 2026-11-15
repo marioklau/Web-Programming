@@ -51,7 +51,7 @@ class JenisController extends Controller
 
     public function show($id)
     {
-        $kategori = Jenis::findOrFail($id);
+        $jenis = Jenis::with('kategori')->findOrFail($id);
         return view('admin.data_pelanggaran.jenis.show', compact('jenis'));
     }
 

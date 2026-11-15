@@ -44,17 +44,17 @@ class SiswaController extends Controller
             ->withCount([
                 'pelanggaran as ringan_count' => function ($query) {
                     $query->whereHas('kategori', function ($q) {
-                        $q->where('nama_kategori', 'RINGAN');
+                        $q->whereRaw('LOWER(nama_kategori) = ?', ['ringan']);
                     });
                 },
                 'pelanggaran as berat_count' => function ($query) {
                     $query->whereHas('kategori', function ($q) {
-                        $q->where('nama_kategori', 'BERAT');
+                        $q->whereRaw('LOWER(nama_kategori) = ?', ['berat']);
                     });
                 },
                 'pelanggaran as sangat_berat_count' => function ($query) {
                     $query->whereHas('kategori', function ($q) {
-                        $q->where('nama_kategori', 'SANGAT BERAT');
+                        $q->whereRaw('LOWER(nama_kategori) = ?', ['sangat berat']);
                     });
                 },
             ]);
@@ -116,12 +116,16 @@ class SiswaController extends Controller
     {
         $tahunAktif = Tahun::where('status', 'aktif')->first();
 
+        if (!$tahunAktif) {
+            return redirect()->back()->with('error', 'Tahun ajaran aktif belum diatur.');
+        }
+
         $siswa = Siswa::with('kelas')
             ->where('tahun_ajaran_id', $tahunAktif->id)
             ->withCount([
-                'pelanggaran as ringan_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->where('nama_kategori', 'RINGAN')),
-                'pelanggaran as berat_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->where('nama_kategori', 'BERAT')),
-                'pelanggaran as sangat_berat_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->where('nama_kategori', 'SANGAT BERAT')),
+                'pelanggaran as ringan_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->whereRaw('LOWER(nama_kategori) = ?', ['ringan'])),
+                'pelanggaran as berat_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->whereRaw('LOWER(nama_kategori) = ?', ['berat'])),
+                'pelanggaran as sangat_berat_count' => fn($q) => $q->whereHas('kategori', fn($k) => $k->whereRaw('LOWER(nama_kategori) = ?', ['sangat berat'])),
             ])
             ->get();
 
@@ -137,7 +141,21 @@ class SiswaController extends Controller
         $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
             'nama_siswa' => 'required',
-            'nis' => 'required|unique:siswa,nis',
+            'nis' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $kelas = Kelas::find($request->kelas_id);
+                    if (!$kelas) return;
+
+                    $sudahAda = Siswa::where('nis', $value)
+                        ->where('tahun_ajaran_id', $kelas->tahun_ajaran_id)
+                        ->exists();
+
+                    if ($sudahAda) {
+                        $fail('NIS sudah digunakan pada tahun ajaran yang sama.');
+                    }
+                },
+            ],
             'jenis_kelamin' => 'required',
         ]);
 
@@ -146,26 +164,12 @@ class SiswaController extends Controller
         Siswa::create([
             'kelas_id'         => $kelas->id,
             'nama_siswa'       => $request->nama_siswa,
-            'nis' => [
-                        'required',
-                        function ($attribute, $value, $fail) use ($request) {
-                            $kelas = Kelas::find($request->kelas_id);
-                            if (!$kelas) return;
-                    
-                            $sudahAda = Siswa::where('nis', $value)
-                                ->where('tahun_ajaran_id', $kelas->tahun_ajaran_id)
-                                ->exists();
-                    
-                            if ($sudahAda) {
-                                $fail('NIS sudah digunakan pada tahun ajaran yang sama.');
-                            }
-                        },
-                    ],            
+            'nis'              => $request->nis,
             'jenis_kelamin'    => $request->jenis_kelamin,
-            'tahun_ajaran_id'  => $kelas->tahun_ajaran_id, // PASTIKAN DISET
+            'tahun_ajaran_id'  => $kelas->tahun_ajaran_id,
         ]);
 
-        return redirect()->route('admin.siswa.index')
+        return redirect()->route('siswa.index')
             ->with('success', 'Siswa Berhasil Ditambahkan.');
     }
 
@@ -185,6 +189,11 @@ class SiswaController extends Controller
     public function edit(Siswa $siswa)
     {
         $tahunAktif = Tahun::where('status', 'aktif')->first();
+
+        if (!$tahunAktif) {
+            return redirect()->back()->with('error', 'Tahun ajaran aktif belum diatur.');
+        }
+
         $daftar_kelas = Kelas::where('tahun_ajaran_id', $tahunAktif->id)->get();
 
         return view('admin.siswa.edit', compact('siswa', 'daftar_kelas'));
@@ -195,7 +204,24 @@ class SiswaController extends Controller
         $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
             'nama_siswa' => 'required|string|max:255',
-            'nis' => 'required|string|max:50',
+            'nis' => [
+                'required',
+                'string',
+                'max:50',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $kelas = Kelas::find($request->kelas_id);
+                    if (!$kelas) return;
+
+                    $sudahAda = Siswa::where('nis', $value)
+                        ->where('tahun_ajaran_id', $kelas->tahun_ajaran_id)
+                        ->where('id', '!=', $id)
+                        ->exists();
+
+                    if ($sudahAda) {
+                        $fail('NIS sudah digunakan pada tahun ajaran yang sama.');
+                    }
+                },
+            ],
         ]);
 
         $siswa = Siswa::findOrFail($id);

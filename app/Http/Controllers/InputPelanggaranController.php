@@ -45,6 +45,11 @@ class InputPelanggaranController extends Controller
             $query->whereDate('created_at', $request->date);
         }
 
+        // Filter berdasarkan siswa
+        if ($request->filled('siswa_id')) {
+            $query->where('siswa_id', $request->siswa_id);
+        }
+
         $pelanggaran = $query->latest()->paginate(10);
 
         // return view('admin.input_pelanggaran.index', compact('pelanggaran'));

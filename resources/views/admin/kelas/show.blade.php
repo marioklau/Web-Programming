@@ -6,12 +6,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <div class="container mx-auto">
-        <div class="grid grid-cols-8 mb-2">
-            <div class="col-span-4">
-                <h1 class="text-2xl font-semibold">
-                    Detail Kelas
-                </h1>
-            </div>
+        <div class="mb-4">
+            <h1>Detail Kelas</h1>
         </div>
 
         <div class="bg-white p-5 rounded shadow-sm">

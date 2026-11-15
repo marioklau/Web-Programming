@@ -5,12 +5,12 @@
 @section('content')
     <h1 class="text-2xl font-semibold text-gray-800 mb-4">Laporan Pelanggaran Siswa</h1>
 
-    <form method="GET" action="{{ route('laporan.index') }}" class="mb-4">
-        <div class="flex flex-wrap items-center gap-4">
+    <form method="GET" action="{{ route('laporan.index') }}" class="mb-5 rounded-2xl border border-slate-200/70 bg-white p-4 shadow-sm sm:p-5">
+        <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
             <!-- Filter Kelas -->
-            <div class="rounded-md">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
                 <label for="kelas_id" class="text-sm font-medium text-gray-700 whitespace-nowrap">Kelas</label>
-                <select name="kelas_id" id="kelas_id" class="border rounded px-2 py-1">
+                <select name="kelas_id" id="kelas_id" class="w-full border rounded px-2 py-1 sm:w-auto">
                     <option value="">Semua Kelas</option>
                     @foreach ($kelasList as $kelas)
                         <option value="{{ $kelas->id }}" {{ $selectedKelas == $kelas->id ? 'selected' : '' }}>
@@ -21,9 +21,9 @@
             </div>
 
             <!-- Filter Periode -->
-            <div class="rounded-md">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
                 <label for="periode" class="text-sm font-medium text-gray-700 whitespace-nowrap">Periode</label>
-                <select name="periode" id="periode" class="border rounded px-2 py-1">
+                <select name="periode" id="periode" class="w-full border rounded px-2 py-1 sm:w-auto">
                     <option value="all" {{ $selectedPeriode == 'all' ? 'selected' : '' }}>Semua</option>
                     <option value="hari" {{ $selectedPeriode == 'hari' ? 'selected' : '' }}>Hari Ini</option>
                     <option value="minggu" {{ $selectedPeriode == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
@@ -34,28 +34,26 @@
             </div>
 
             <!-- Filter Custom Date (akan muncul hanya ketika custom dipilih) -->
-            <div id="customDateFilter" style="{{ $selectedPeriode != 'custom' ? 'display:none;' : '' }}">
-                <label for="start_date" class="mr-2">Dari:</label>
+            <div id="customDateFilter" class="flex flex-col gap-2 sm:flex-row sm:items-center" style="{{ $selectedPeriode != 'custom' ? 'display:none;' : '' }}">
+                <label for="start_date" class="text-sm font-medium text-gray-700 whitespace-nowrap">Dari:</label>
                 <input type="date" name="start_date" id="start_date" 
-                    value="{{ $startDate ?? '' }}" class="border rounded px-2 py-1">
+                    value="{{ $startDate ?? '' }}" class="w-full border rounded px-2 py-1 sm:w-auto">
                 
-                <label for="end_date" class="ml-2 mr-2">Sampai:</label>
+                <label for="end_date" class="text-sm font-medium text-gray-700 whitespace-nowrap sm:ml-2">Sampai:</label>
                 <input type="date" name="end_date" id="end_date" 
-                    value="{{ $endDate ?? '' }}" class="border rounded px-2 py-1">
+                    value="{{ $endDate ?? '' }}" class="w-full border rounded px-2 py-1 sm:w-auto">
             </div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow text-sm">
-                Filter
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow text-sm">
+                    Filter
+                </button>
 
-            <div>
                 <a href="{{ route('laporan.exportPdf', ['kelas_id' => $selectedKelas, 'periode' => $selectedPeriode, 'start_date' => $startDate ?? '', 'end_date' => $endDate ?? '']) }}"
                 class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow text-sm">
                     Export PDF
                 </a>
-            </div>
 
-             <div>
                 <a href="{{ route('laporan.exportExcel', [
                     'kelas_id' => $selectedKelas, 
                     'periode' => $selectedPeriode, 
@@ -70,8 +68,8 @@
     </form>
 
     @if ($siswa->count())
-        <div class="overflow-x-auto">
-            <table class="min-w-full rounded-xl">
+        <div class="overflow-x-auto rounded-2xl border border-slate-200/70 bg-white shadow-sm">
+            <table class="min-w-full">
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="p-2 text-center text-sm font-semibold text-gray-900">No</th>

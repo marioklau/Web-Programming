@@ -58,7 +58,7 @@
                 </select>
             </div>
 
-            <div class="flex items-end gap-2 col-span-3">
+            <div class="flex flex-wrap items-end gap-2 md:col-span-3">
                 <div class="flex flex-col items-center">
                     <label class="text-xs font-semibold text-gray-700 mb-1">R</label>
                     <input type="text" id="count-r" class="w-14 p-1 text-xs border-2 rounded text-center bg-green-100 text-green-800" readonly>

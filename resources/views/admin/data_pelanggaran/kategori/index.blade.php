@@ -76,7 +76,7 @@
         x-transition:leave-end="opacity-0"
         class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
     >
-        <div class="bg-white rounded-lg p-6 shadow-lg w-96 text-center">
+        <div class="mx-4 w-[calc(100%-2rem)] max-w-sm rounded-2xl bg-white p-6 text-center shadow-lg">
             <h2 class="text-lg font-semibold mb-4">Konfirmasi Hapus</h2>
             <p class="mb-6 text-gray-700">Apakah Anda yakin ingin menghapus kategori ini?</p>
             <div class="flex justify-center gap-4">

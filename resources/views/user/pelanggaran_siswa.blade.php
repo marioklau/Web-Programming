@@ -7,18 +7,18 @@
     <h1 class="text-2xl font-semibold mb-6">Pelanggaran Siswa</h1>
 
     <!-- Filter Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:its-center gap-4 mb-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
     <!-- Judul Riwayat Pelanggaran -->
     <h2 class="text-lg font-normal whitespace-nowrap">Riwayat Pelanggaran</h2>
 
     <!-- Container untuk Filter dan Tombol Tambah -->
-    <div class="flex flex-col md:flex-row items-start md:items-center gap-4 ml-auto">
+    <div class="flex w-full flex-col gap-4 md:ml-auto md:w-auto md:flex-row md:items-center">
         <!-- Filter Form -->
-        <form action="{{ route('input_pelanggaran.index') }}" method="GET" class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <form action="{{ route('input_pelanggaran.index') }}" method="GET" class="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-center md:w-auto">
             <!-- Status Filter -->
-            <div class="flex items-center gap-2">
+            <div class="flex w-full items-center gap-2 sm:w-auto">
                 <label for="status" class="text-sm font-medium text-gray-700 whitespace-nowrap">Status</label>
-                <select id="status" name="status" class="border border-gray-300 rounded-md py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="status" name="status" class="w-full border border-gray-300 rounded-md py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto">
                     <option value="">Semua Status</option>
                     <option value="Sudah" {{ request('status') == 'Sudah' ? 'selected' : '' }}>Sudah</option>
                     <option value="Belum" {{ request('status') == 'Belum' ? 'selected' : '' }}>Belum</option>
@@ -26,14 +26,14 @@
             </div>
 
             <!-- Date Filter -->
-            <div class="flex items-center gap-2">
+            <div class="flex w-full items-center gap-2 sm:w-auto">
                 <label for="date" class="text-sm font-medium text-gray-700 whitespace-nowrap">Tanggal</label>
                 <input type="date" id="date" name="date" value="{{ request('date') }}" 
-                    class="border border-gray-300 rounded-md py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full border border-gray-300 rounded-md py-1 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto">
             </div>
 
             <!-- Submit Button -->
-            <div>
+            <div class="w-full sm:w-auto">
                 <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 transition duration-300 whitespace-nowrap">
                     Filter
                 </button>
